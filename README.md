@@ -20,10 +20,6 @@
 - **GPT API** - 질문 생성 AI
 - **MySQL** - 데이터 저장
 
-//### DevOps & Tools
-//- **GitHub Actions** - 자동 배포 & CI/CD
-//- **Docker** - 컨테이너화된 배포
-//- **AWS (EC2, RDS)** - 서버 호스팅
 
 ## 📌 **팀 소개**
 👩‍💻 **팀 NerdyGirl** - "나"를 위한 고민을 기술로 해결하는 개발팀 💡
