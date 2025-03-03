@@ -11,6 +11,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class Member extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // 기본 키 자동 증가
     private Long id;
@@ -41,6 +42,10 @@ public class Member extends BaseEntity {
         if (!this.imageUrl.equals(newImageUrl)) {
             this.imageUrl = newImageUrl;
         }
+    }
+
+    public enum Role {
+        ROLE_USER, ROLE_ADMIN
     }
 }
 
