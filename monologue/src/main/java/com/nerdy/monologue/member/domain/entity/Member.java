@@ -28,6 +28,10 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String imageUrl;
 
+    // 리프레시 토큰을 저장할 필드
+    @Column(nullable = true)
+    private String refreshToken;
+
     public void changePassword(String encodedPassword) {
         this.password = encodedPassword;
     }
@@ -44,8 +48,8 @@ public class Member extends BaseEntity {
         }
     }
 
-    public enum Role {
-        ROLE_USER, ROLE_ADMIN
+    public void updateRefreshToken(String newRefreshToken) {
+        this.refreshToken = newRefreshToken;
     }
 }
 

@@ -1,16 +1,16 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/monologue?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/monologue?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: root
-    password: 1410
+    password: rladb156
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     defer-datasource-initialization: true
     sql:
@@ -19,4 +19,5 @@ spring:
 
 jwt:
   secret: 3a02fcdb03a9b872d71f8b82b456a9e5b6c7e0f88c6a1b02cdbef00a1d4fe9f9
-  expiration: 3600
+  expiration: 3600000
+  refresh-expiration: 86400

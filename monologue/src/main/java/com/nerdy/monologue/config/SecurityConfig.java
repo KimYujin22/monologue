@@ -1,11 +1,11 @@
 package com.nerdy.monologue.config;
 
 
-import com.nerdy.monologue.config.security.JwtAuthenticationFilter;
-import com.nerdy.monologue.config.security.JwtTokenProvider;
+import com.nerdy.monologue.config.security.CustomAuthenticationFilter;
+import com.nerdy.monologue.config.security.JWTFilterV1;
+import com.nerdy.monologue.config.security.JWTUtil;
 import com.nerdy.monologue.member.repository.MemberRepository;
 import com.nerdy.monologue.member.service.CustomUserDetailsService;
-import com.nerdy.monologue.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,6 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,8 +25,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class SecurityConfig implements WebMvcConfigurer {
 
-    private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService userDetailsService;
+    private final JWTUtil jwtUtil;
+    private final MemberRepository memberRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -48,11 +48,18 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/members/signup", "/api/members/login").permitAll()
+                        .requestMatchers("/api/member/signup", "/api/member/login").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+                // 로그인 처리 필터, JWT 필터
+                .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTFilterV1(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
+        return new CustomAuthenticationFilter(authenticationManager(), memberRepository, jwtUtil);
     }
 
     @Override

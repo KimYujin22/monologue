@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: local
+    group:
+      local: local
+      prod: local
+    include:
+      - jwt
+      - oauth
+      - aws
+      - s3
+  servlet:
+    multipart:
+      resolve-lazily: true
+      max-file-size: 10MB
+      max-request-size: 10MB
